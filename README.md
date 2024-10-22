@@ -24,21 +24,21 @@ There will be every step listed, what is needed to build this gem:
 
 ## Python (FastAPI /w ONTAP SDK)
 
-- [] Create Python dir
-- [] Set up all stuff
-- [] Code
-- [] Provide dockerfile
+- [ ] Create Python dir
+- [ ] Set up all stuff
+- [ ] Code
+- [ ] Provide dockerfile
 
 ## Rust (Actix-Web /w reqwests)
 
-- [] Create Rust dir
-- [] Set up all stuff
-- [] Code
-- [] Provide dockerfile
+- [ ] Create Rust dir
+- [ ] Set up all stuff
+- [ ] Code
+- [ ] Provide dockerfile
 
 ## Vue (FrontEnd stuff)
 
-- [] Create frontend dir
-- [] Bla!
-- [] Code
-- [] Provide dockerfile
+- [ ] Create frontend dir
+- [ ] Bla!
+- [ ] Code
+- [ ] Provide dockerfile
