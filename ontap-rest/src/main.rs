@@ -1,49 +1,42 @@
-use anyhow::{Error, Ok, Result};
-use env_vars::*;
+use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer};
+use anyhow::{Ok, Result};
+use env_logger::Env;
+use ontap::create_nfs_export;
 use serde::{Deserialize, Serialize};
 
 mod env_vars;
+mod ontap;
 
-// Data structure for creating a POST request
-#[derive(Debug, Deserialize, Serialize)]
-struct Volume {
-    svm: Vserver,
-    name: String,
-    aggregates: Vec<String>,
+#[derive(Serialize, Deserialize, Debug)]
+struct FormData {
+    volume_name: String,
     size: u16,
+    prefix: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-struct Vserver {
-    name: String,
-}
+async fn recieve_data(data: web::Json<FormData>) -> HttpResponse {
+    // recieving request from web-frontend
+    create_nfs_export(data.0.volume_name, data.0.size, data.0.prefix)
+        .await
+        .expect("Failed to create NFS share!");
 
-async fn create_nfs_export(volume: Volume, ontap_host: OntapCluster) -> Result<(), Error> {
-    // creating a POST request statement to an ONTAP cluster
-    let client = reqwest::Client::new();
-    let resource = client
-        .post("https://httpbin.org/post")
-        .basic_auth(ontap_host.ontap_username, Some(ontap_host.ontap_password))
-        .json(&volume)
-        .send()
-        .await?;
-
-    Ok(())
+    HttpResponse::Ok().body("data")
 }
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    // getting env vars
-    let ontap_host = read_env_vars();
+    env_logger::init_from_env(Env::default().default_filter_or("info"));
 
-    let volume = Volume {
-        svm: Vserver {
-            name: "TestSvm".to_string(),
-        },
-        name: "TestVol".to_string(),
-        aggregates: vec!["TestAggr1".to_string()],
-        size: 1234,
-    };
+    HttpServer::new(|| {
+        App::new()
+            .wrap(Logger::default())
+            .wrap(Logger::new("%a %{User-Agent}i"))
+            .app_data(web::JsonConfig::default().limit(4096))
+            .service(web::resource("/create_nfs").route(web::post().to(recieve_data)))
+    })
+    .bind("127.0.0.1:8000")?
+    .run()
+    .await?;
 
     Ok(())
 }
