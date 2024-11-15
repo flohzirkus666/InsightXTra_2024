@@ -1,0 +1,75 @@
+---
+- name: Create Body for Cluster Setup
+  ansible.builtin.set_fact:
+    body:
+      name: "{{ cluster_name }}"
+      management_interface:
+        ip:
+          address: "{{ cluster_mgmt_ip }}"
+          netmask: "{{ subnet_mask }}"
+          gateway: "{{ gateway }}"
+      dns_domains:
+        - "{{ dns_domain }}"
+      name_servers:
+        -  "{{ dns_name_server }}"
+      nodes:
+        - name: "{{ cluster_name }}-01"
+          cluster_interface:
+            ip:
+              address: "{{ node1_mgmt_ip }}"
+          location: "{{ location1 }}"
+          management_interface:
+            ip:
+              address: "{{ node1_mgmt_ip }}"
+          service_processor:
+            ipv4_interface:
+              address: "{{ node1_sp_ip }}"
+              netmask: "{{ subnet_mask }}"
+              gateway: "{{ gateway }}"
+        - name: "{{ cluster_name }}-02"
+          cluster_interface:
+            ip:
+              address: "{{ node2_mgmt_ip }}"
+          location: "{{ location2 }}"
+          management_interface:
+            ip:
+              address: "{{ node2_mgmt_ip }}"
+          service_processor:
+            ipv4_interface:
+              address: "{{ node2_sp_ip }}"
+              netmask: "{{ subnet_mask }}"
+              gateway: "{{ gateway }}"
+
+- name: Show the Body
+  debug:
+    msg: "{{ body }}"
+
+- name: run ontap REST API command as cluster admin
+  netapp.ontap.na_ontap_restit:
+    hostname: "{{ node1_mgmt_ip }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    api: cluster
+    body: "{{ body }}"
+    method: POST
+  register: restit_start
+
+- name: Show me restit_start
+  debug:
+    msg: "{{ restit_start }}"
+
+- name: Get Job Status
+  netapp.ontap.na_ontap_restit:
+    hostname: "{{ node1_mgmt_ip }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    api: "cluster/jobs/{{ restit_start.response.job.uuid }}"
+  register: restit_job
+
+- name: Show me the Job Status
+  debug:
+    msg: "{{ restit_job }}"
