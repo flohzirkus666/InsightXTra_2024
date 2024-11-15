@@ -1,0 +1,22 @@
+---
+# DHCP IP Address
+dhcp_node1_ip: 192.168.0.50
+dhcp_node2_ip: 192.168.0.51
+# Cluster wide information
+cluster_name: cluster1
+contact: me
+dns_domain: demo.netapp.com
+dns_name_server: 192.168.0.253
+ntp_server: 192.168.0.1
+timezone: Europe/Zurich
+cluster_mgmt_ip: 192.168.0.101
+subnet_mask: 255.255.255.0
+gateway: 192.168.0.1
+# Node 1
+node1_mgmt_ip: 192.168.0.111
+location1: "DC1 Rack2"
+node1_sp_ip: 192.168.0.200
+# Node 2
+node2_mgmt_ip: 192.168.0.112
+location2: "DC1 Rack2"
+node2_sp_ip: 192.168.0.201
