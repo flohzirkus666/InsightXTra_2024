@@ -1,2 +1,11 @@
 ---
-# vars file for vserver
+cluster_name: cluster1.demo.netapp.com
+vserver_name: cifs_svm
+vserver_dns_domain: demo.netapp.com
+vserver_dns_server: 192.168.0.253
+vserver_ip_address: 192.168.0.60
+vserver_subnet_mask: 255.255.255.0
+vserver_gateway: 192.168.0.1
+vserver_home_node: cluster1-01
+vserver_home_port: e0c
+ad_domain: demo.netapp.com
