@@ -98,3 +98,25 @@
     disk_count: 10
     nodes: "{{ cluster_name }}-02"
     snaplock_type: non_snaplock
+
+- name: Add NLF licenses for Node 1
+  netapp.ontap.na_ontap_license:
+    hostname: "{{ dhcp_node1_ip }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    license_codes:
+      - "{{ lookup('file', 'cluster_setup/files/NLF-000000000070-LOD_Bundle.txt') | string }}"
+
+- name: Add NLF licenses for Node 2
+  netapp.ontap.na_ontap_license:
+    hostname: "{{ dhcp_node1_ip }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    license_codes:
+      - "{{ lookup('file', 'cluster_setup/files/NLF-000000000071-LOD_Bundle.txt') | string }}"
