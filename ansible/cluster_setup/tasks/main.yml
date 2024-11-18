@@ -21,19 +21,14 @@
           address: "{{ cluster_mgmt_ip }}"
           netmask: "{{ subnet_mask }}"
           gateway: "{{ gateway }}"
-      dns_domains:
-        - "{{ dns_domain }}"
-      name_servers:
-        -  "{{ dns_name_server }}"
-      timezone:
-        name: "{{ timezone }}"
-      ntp_servers:
-        - "{{ ntp_server }}"
+      dns_domains: "{{ dns_domain }}"
+      name_servers: "{{ dns_name_server }}"
+      timezone.name: "{{ timezone }}"
       nodes:
         - name: "{{ cluster_name }}-01"
           cluster_interface:
             ip:
-              address: "{{cluster_ip_node_info.response.records[1].cluster_interfaces[0].ip.address}}"
+              address: "{{ cluster_ip_node_info.response.records[0].cluster_interfaces[0].ip.address }}"
           location: "{{ location }}"
           management_interface:
             ip:
@@ -41,17 +36,13 @@
         - name: "{{ cluster_name }}-02"
           cluster_interface:
             ip:
-              address: "{{cluster_ip_node_info.response.records[0].cluster_interfaces[0].ip.address}}"
+              address: "{{ cluster_ip_node_info.response.records[1].cluster_interfaces[0].ip.address }}"
           location: "{{ location }}"
           management_interface:
             ip:
               address: "{{ node2_mgmt_ip }}"
 
-- name: Show the Body
-  debug:
-    msg: "{{ body }}"
-
-- name: run ontap REST API command as cluster admin
+- name: Start Cluster Setup
   netapp.ontap.na_ontap_restit:
     hostname: "{{ dhcp_node1_ip }}"
     username: admin
@@ -61,22 +52,49 @@
     api: cluster
     body: "{{ body }}"
     method: POST
-  register: restit_start
+  register: start_cluster_setup
 
-- name: Show me restit_start
-  debug:
-    msg: "{{ restit_start }}"
-
-- name: Get Job Status
+- name: Wait until Cluster Setup is done
   netapp.ontap.na_ontap_restit:
-    hostname: "{{ node1_mgmt_ip }}"
+    hostname: "{{ dhcp_node1_ip }}"
     username: admin
     password: Netapp1!
     https: true
     validate_certs: false
-    api: "cluster/jobs/{{ restit_start.response.job.uuid }}"
-  register: restit_job_status
+    api: "cluster/jobs/{{ start_cluster_setup.response.job.uuid }}"
+  register: job_status
+  until: job_status.response.state != 'running'
+  retries: 100
+  delay: 3
 
-- name: Show me the Job Status
-  debug:
-    msg: "{{ restit_job_status }}"
+- name: Show Job Status and Message
+  ansible.builtin.debug:
+    msg: "{{ job_status.response.state }} -> {{ job_status.response.message }}"
+
+- name: Create Data Aggregate on Node 1
+  netapp.ontap.na_ontap_aggregate:
+    hostname: "{{ dhcp_node1_ip }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    service_state: online
+    name: "{{ cluster_name }}_01_data"
+    disk_count: 10
+    nodes: "{{ cluster_name }}-01"
+    snaplock_type: non_snaplock
+
+- name: Create Data Aggregate on Node 2
+  netapp.ontap.na_ontap_aggregate:
+    hostname: "{{ dhcp_node1_ip }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    service_state: online
+    name: "{{ cluster_name }}_02_data"
+    disk_count: 10
+    nodes: "{{ cluster_name }}-02"
+    snaplock_type: non_snaplock
