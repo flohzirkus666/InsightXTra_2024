@@ -1,0 +1,6 @@
+---
+cluster_name: cluster1.demo.netapp.com
+vserver_name: cifs_svm
+share_name: movie$
+aggregate_name: cluster1_01_data
+volume_size: 50
