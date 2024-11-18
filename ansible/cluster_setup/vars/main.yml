@@ -6,11 +6,11 @@ dhcp_node2_ip: 192.168.0.51
 cluster_name: cluster1
 location: "DC1 Rack2"
 contact: me
-dns_domain: demo.netapp.com
-dns_name_server: 192.168.0.253
-ntp_server:
-  192.168.0.1
-  8.8.8.8
+dns_domain:
+  - demo.netapp.com
+dns_name_server:
+  - 192.168.0.253
+  - 8.8.8.8
 timezone: Europe/Zurich
 cluster_mgmt_ip: 192.168.0.101
 subnet_mask: 255.255.255.0
