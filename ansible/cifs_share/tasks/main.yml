@@ -1,0 +1,51 @@
+---
+- name: Create Volume
+  delegate_to: localhost
+  na_ontap_volume:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    vserver: "{{ vserver_name }}"
+    name: "{{ vserver_name }}_vol1"
+    size: "{{ volume_size }}"
+    size_unit: gb
+    aggregate_name: "{{ aggregate_name }}"
+    junction_path: "/{{ vserver_name }}_vol1"
+    percent_snapshot_space: 0
+    space_guarantee: none
+    volume_security_style: ntfs
+    wait_for_completion: true
+
+- name: create cifs share {{ share_name }}
+  delegate_to: localhost
+  netapp.ontap.na_ontap_cifs:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    vserver: "{{ vserver_name }}"
+    name: "{{ share_name }}"
+    path: "/{{ vserver_name }}_vol1"
+
+- name: Get IP address from Vserver {{ vserver_name }}
+  delegate_to: localhost
+  netapp.ontap.na_ontap_rest_info:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    use_python_keys: true
+    gather_subset: ip_interfaces_info
+    parameters:
+      svm.name: "{{ vserver_name }}"
+  register: vserver_ip_info
+
+- name: Show mount
+  debug:
+    msg: "Mount with: {{ vserver_ip_info.ontap_info.network_ip_interfaces.records[0].ip.address }} and {{ share_name }} "
