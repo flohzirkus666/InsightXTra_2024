@@ -1,0 +1,85 @@
+---
+- name: create vserver {{ vserver_name }}
+  delegate_to: localhost
+  netapp.ontap.na_ontap_svm:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    name: "{{ vserver_name }}"
+    services:
+      cifs:
+        allowed: "{{ cifs_allowed }}"
+      nfs:
+        allowed: "{{ nfs_allowed }}"
+      iscsi:
+        allowed: false
+      fcp:
+        allowed: false
+
+- name: create data lif
+  delegate_to: localhost
+  netapp.ontap.na_ontap_interface:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    vserver: "{{ vserver_name }}"
+    address: "{{ ip_address }}"
+    netmask: "{{ subnet_mask }}"
+    home_node: "{{ home_node }}"
+    home_port: "{{ home_port }}"
+    interface_name: "{{ vserver_name }}_data_lif"
+    admin_status: up
+    service_policy: default-data-files
+
+- name: create routing
+  delegate_to: localhost
+  netapp.ontap.na_ontap_net_routes:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    destination: 0.0.0.0/0
+    gateway: "{{ gateway }}"
+    vserver: "{{ vserver_name }}"
+
+- name: Join to the Active Directoy
+  delegate_to: localhost
+  netapp.ontap.na_ontap_cifs_server:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    admin_user_name: administrator
+    admin_password: Netapp1!
+    domain: "{{ ad_domain }}"
+    force: true
+    name: "{{ vserver_name }}"
+    service_state: started
+    vserver: "{{ vserver_name }}"
+  when: cifs_allowed
+
+- name: Configure NFS
+  delegate_to: localhost
+  netapp.ontap.na_ontap_nfs:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    service_state: started
+    nfsv3: enabled
+    nfsv4: disabled
+    nfsv41: disabled
+    vserver: "{{ vserver_name }}"
+  when: nfs_allowed
