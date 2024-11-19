@@ -1,5 +1,5 @@
 ---
-- name: create and configure CIFS vserver {{ cifs_svm_name }}
+- name: Create and configure CIFS vserver {{ cifs_svm_name }}
   ansible.builtin.include_tasks: create_and_configure_vserver.yml
   vars:
     vserver_name: "{{ cifs_svm_name }}"
@@ -14,7 +14,7 @@
     dns_server: "{{ svm_dns_server }}"
     ad_domain: "{{ cifs_ad_domain }}"
 
-- name: create and configure NFS vserver {{ nfs_svm_name }}
+- name: Create and configure NFS vserver {{ nfs_svm_name }}
   ansible.builtin.include_tasks: create_and_configure_vserver.yml
   vars:
     vserver_name: "{{ nfs_svm_name }}"
