@@ -44,6 +44,7 @@
     gather_subset: ip_interfaces_info
     parameters:
       svm.name: "{{ vserver_name }}"
+    fields: ip
   register: vserver_ip_info
 
 - name: Show mount
