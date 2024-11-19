@@ -1,11 +1,18 @@
 ---
+# General stuff
 cluster_name: cluster1.demo.netapp.com
-vserver_name: cifs_svm
-vserver_dns_domain: demo.netapp.com
-vserver_dns_server: 192.168.0.253
-vserver_ip_address: 192.168.0.60
-vserver_subnet_mask: 255.255.255.0
-vserver_gateway: 192.168.0.1
-vserver_home_node: cluster1-01
-vserver_home_port: e0c
-ad_domain: demo.netapp.com
+svm_subnet_mask: 255.255.255.0
+svm_gateway: 192.168.0.1
+svm_dns_domain: demo.netapp.com
+svm_dns_server: 192.168.0.253
+# CIFS stuff
+cifs_svm_name: cifs_svm
+cifs_svm_ip_address: 192.168.0.60
+cifs_ad_domain: demo.netapp.com
+cifs_svm_home_node: cluster1-01
+cifs_svm_home_port: e0c
+# NFS stuff
+nfs_svm_name: nfs_svm
+nfs_svm_ip_address: 192.168.0.61
+nfs_svm_home_node: cluster1-02
+nfs_svm_home_port: e0c
