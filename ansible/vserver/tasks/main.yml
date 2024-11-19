@@ -7,9 +7,9 @@
     nfs_allowed: false
     ip_address: "{{ cifs_svm_ip_address }}"
     subnet_mask: "{{ svm_subnet_mask }}"
+    gateway: "{{ svm_gateway }}"
     home_node: "{{ cifs_svm_home_node }}"
     home_port: "{{ cifs_svm_home_port }}"
-    gateway: "{{ svm_gateway }}"
     dns_domain: "{{ svm_domain}}"
     dns_server: "{{ svm_dns_server }}"
     ad_domain: "{{ cifs_ad_domain }}"
@@ -22,8 +22,8 @@
     nfs_allowed: true
     ip_address: "{{ nfs_svm_ip_address }}"
     subnet_mask: "{{ svm_subnet_mask }}"
+    gateway: "{{ svm_gateway }}"
     home_node: "{{ nfs_svm_home_node }}"
     home_port: "{{ nfs_svm_home_port }}"
-    gateway: "{{ svm_gateway }}"
     dns_domain: "{{ svm_domain}}"
     dns_server: "{{ svm_dns_server }}"
