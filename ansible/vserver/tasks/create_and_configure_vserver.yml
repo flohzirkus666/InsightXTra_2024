@@ -20,8 +20,6 @@
         allowed: false
       ndmp:
         allowed: false
-      s3:
-        allowed: false
 
 - name: create data lif
   delegate_to: localhost
