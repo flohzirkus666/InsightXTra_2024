@@ -1,3 +1,99 @@
-#SPDX-License-Identifier: MIT-0
 ---
-# tasks file for nfs_share
+- name: Add default export-policy rule to the default policy
+  delegate_to: localhost
+  netapp.ontap.na_ontap_export_policy_rule:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    vserver: "{{ vserver_name }}"
+    name: default
+    client_match: 0.0.0.0/0
+    protocol: nfs
+    ro_rule: any
+    rw_rule: none
+    super_user_security: any
+
+- name: Create export-policy {{ export_policy }}
+  delegate_to: localhost
+  netapp.ontap.na_ontap_export_policy:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    name: "{{ export_policy }}"
+    vserver: "{{ vserver_name }}"
+
+- name: create new export-policy rule
+  delegate_to: localhost
+  netapp.ontap.na_ontap_export_policy_rule:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    vserver: "{{ vserver_name }}"
+    name: "{{ export_policy }}"
+    client_match: "{{ clientmatch }}"
+    protocol: nfs
+    ro_rule: any
+    rw_rule: any
+    super_user_security: any
+
+- name: Create Volume
+  delegate_to: localhost
+  na_ontap_volume:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    vserver: "{{ vserver_name }}"
+    name: "{{ vserver_name }}_vol1"
+    size: "{{ volume_size }}"
+    size_unit: gb
+    aggregate_name: "{{ aggregate_name }}"
+    junction_path: "/{{ vserver_name }}_vol1"
+    export_policy: "{{ export_policy }}"
+    percent_snapshot_space: 0
+    space_guarantee: none
+    volume_security_style: unix
+    wait_for_completion: true
+
+- name: Create Qtree
+  delegate_to: localhost
+  netapp.ontap.na_ontap_qtree:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    vserver: "{{ vserver_name }}"
+    flexvol_name: "{{ vserver_name }}_vol1"
+    name: "{{ qtree }}"
+
+- name: Get IP address from Vserver {{ vserver_name }}
+  delegate_to: localhost
+  netapp.ontap.na_ontap_rest_info:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    use_python_keys: true
+    gather_subset: ip_interfaces_info
+    parameters:
+      svm.name: "{{ vserver_name }}"
+    fields: ip
+  register: vserver_ip_info
+
+- name: Show mount
+  debug:
+    msg: "Mountpath: {{ vserver_ip_info.ontap_info.network_ip_interfaces.records[0].ip.address }}:/{{ qtree }}"

@@ -1,3 +1,8 @@
-#SPDX-License-Identifier: MIT-0
 ---
-# vars file for nfs_share
+cluster_name: cluster1.demo.netapp.com
+vserver_name: nfs_svm
+qtree: photo
+aggregate_name: cluster1_02_data
+volume_size: 20
+export_policy: my_export_policy
+clientmatch: rhel1.demo.netapp.com
