@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  gather_facts: False
+  collections:
+    - netapp.ontap
+  tasks:
+    - name: start playbook
+      include_role:
+        name: nfs_share
