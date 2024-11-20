@@ -52,6 +52,20 @@
     gateway: "{{ gateway }}"
     vserver: "{{ vserver_name }}"
 
+- name: create dns
+  delegate_to: localhost
+  netapp.ontap.na_ontap_dns:
+    hostname: "{{ cluster_name }}"
+    username: admin
+    password: Netapp1!
+    https: true
+    validate_certs: false
+    state: present
+    domains: "{{ svm_dns_domain }}"
+    nameservers: "{{ svm_dns_server }}"
+    skip_validation: true
+    vserver: "{{ vserver_name }}"
+
 - name: Join to the Active Directoy
   delegate_to: localhost
   netapp.ontap.na_ontap_cifs_server:
