@@ -96,4 +96,4 @@
 
 - name: Show mount
   debug:
-    msg: "Mountpath: {{ vserver_ip_info.ontap_info.network_ip_interfaces.records[0].ip.address }}:/{{ qtree }}"
+    msg: "Mountpath: {{ vserver_ip_info.ontap_info.network_ip_interfaces.records[0].ip.address }}:/{{ vserver_name }}_vol1/{{ qtree }}"
