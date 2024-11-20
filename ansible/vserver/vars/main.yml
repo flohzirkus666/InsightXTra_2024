@@ -7,12 +7,12 @@ svm_dns_domain: demo.netapp.com
 svm_dns_server: 192.168.0.253
 # CIFS stuff
 cifs_svm_name: cifs_svm
-cifs_svm_ip_address: 192.168.0.60
+cifs_svm_ip_address: 192.168.0.160
 cifs_ad_domain: demo.netapp.com
 cifs_svm_home_node: cluster1-01
 cifs_svm_home_port: e0c
 # NFS stuff
 nfs_svm_name: nfs_svm
-nfs_svm_ip_address: 192.168.0.61
+nfs_svm_ip_address: 192.168.0.161
 nfs_svm_home_node: cluster1-02
 nfs_svm_home_port: e0c
