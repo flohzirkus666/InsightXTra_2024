@@ -17,6 +17,6 @@ scp ./InsightXTra_2024.zip $username@$linuxhost:/home/$username/;
 Write-Output "Process completed successfully";
 
 Write-Output "Connecting to remote Linux host, unzipping the file and running deploy_lod.sh";
-ssh $username@$linuxhost 'unzip /path/to/destination/InsightXTra_2024.zip -d /path/to/destination && /path/to/destination/InsightXTra_2024/deploy_lod.sh'
+ssh $username@$linuxhost 'unzip /home/root/InsightXTra_2024.zip -d /home/root/ && /home/root/InsightXTra_2024/deploy_lod.sh'
 
 Write-Output "Deployment script executed successfully";
