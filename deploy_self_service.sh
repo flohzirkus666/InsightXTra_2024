@@ -1,12 +1,7 @@
 #!/bin/bash
 
-# Update the yum package index
-yum update -y
-
 # Install Docker
-yum install -y docker docker-compose
-
-
+yum install -y docker podman-compose
 
 # Verify Docker installation
 docker --version
