@@ -10,7 +10,7 @@ CORS(app)
 def create_share():
     share_name = request.json.get("smb_name")
     share_size = request.json.get("smb_size")
-    size_unit = request.json.get("smb_size_prefix")
+    size_unit = request.json.get("size_prefix")
     permissions = request.json.get("smb_permission")
 
     size = f"{share_size}{size_unit}"
@@ -22,4 +22,4 @@ def create_share():
         return Response(status=400)
 
 if __name__ == "__main__":
-    app.run(port=4000)
+    app.run(host="0.0.0.0", port=4000)

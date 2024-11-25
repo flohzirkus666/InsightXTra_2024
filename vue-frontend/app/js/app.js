@@ -26,7 +26,7 @@ createApp({
                 const smbSizePrefix = this.$refs.smb_size.value.slice(-2);
                 const smbPermission = this.$refs.smb_permission.value;
 
-                const response = await fetch('http://rhel.demo.netapp.com:4000/cifs_share', {
+                const response = await fetch('http://rhel1.demo.netapp.com:4000/cifs_share', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
