@@ -1,29 +1,17 @@
-FROM python:3.13.0-alpine3.20 AS builder
+# Use the official Python 3.13 Alpine image from the Docker Hub
+FROM python:3.13-alpine
 
+# Set the working directory in the container
 WORKDIR /app
-COPY . /app
 
-RUN python3 -m venv /app/venv
-ENV PATH="/app/venv/:$PATH"
+# Copy the requirements file into the container
+COPY requirements.txt .
 
-COPY  requirements.txt .
-RUN venv/bin/pip install -r requirements.txt
+# Install the dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-FROM python:3.13.0-alpine3.20
+# Copy the rest of the application code into the container
+COPY . .
 
-COPY --from=builder /app /app
-
-RUN useradd fastapi
-RUN chown -R fastapi:fastapi /app
-USER fastapi
-
-# Setting env vars
-ENV ONTAP_HOST $ONTAP_HOST
-ENV ONTAP_USERNAME $ONTAP_USERNAME
-ENV ONTAP_PASSWORD $ONTAP_PASSWORD
-
-EXPOSE 8000
-
-ENV PATH="/app/venv/bin/:$PATH"
-
-CMD ["fastapi run app.py"]
+# Specify the entrypoint command to run the application
+ENTRYPOINT ["fastapi", "run", "api.py"]

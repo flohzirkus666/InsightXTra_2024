@@ -1,7 +1,7 @@
 from fastapi import FastAPI, status
 from pydantic import BaseModel
 
-from . import create_cifs_share
+from create_share import create_cifs_share
 
 
 class CifsShare(BaseModel):
