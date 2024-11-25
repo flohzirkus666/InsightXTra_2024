@@ -34,7 +34,7 @@ pub async fn create_nfs_export(
     // creating an object for our request
     let volume = Volume {
         svm: Vserver {
-            name: "svm1".to_string(),
+            name: "nfs_svm".to_string(),
         },
         nas: Nas {
             security_style: "unix".to_string(),

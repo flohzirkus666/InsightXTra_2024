@@ -26,7 +26,7 @@ createApp({
                 const smbSizePrefix = this.$refs.smb_size.value.slice(-2);
                 const smbPermission = this.$refs.smb_permission.value;
 
-                const response = await fetch('http://192.168.10.2/cifs_share', {
+                const response = await fetch('http://rhel.demo.netapp.com:4000/cifs_share', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ createApp({
                 const nfsSize = this.$refs.nfs_size.value.slice(0, -2);
                 const sizePrefix = this.$refs.nfs_size.value.slice(-2);
 
-                const response = await fetch('http://192.168.10.3/nfs_share', {
+                const response = await fetch('http://rhel1.demo.netapp.com:5000/nfs_share', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

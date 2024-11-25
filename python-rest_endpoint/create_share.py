@@ -22,7 +22,7 @@ def create_cifs_share(
     # first step: creating a volume
     new_vol = Volume(
         name=f"{share_name}_vol",
-        svm={"name": "svm1"},
+        svm={"name": "cifs_svm"},
         size=size,
         nas={"path": f"/{share_name}".lower()},
         aggregates=[{"name": "cluster1_01_aggr1"}],

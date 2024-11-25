@@ -34,7 +34,7 @@ async fn main() -> Result<()> {
             .app_data(web::JsonConfig::default().limit(4096))
             .service(web::resource("/create_nfs").route(web::post().to(recieve_data)))
     })
-    .bind("0.0.0.0:8000")?
+    .bind("0.0.0.0:5000")?
     .run()
     .await?;
 
