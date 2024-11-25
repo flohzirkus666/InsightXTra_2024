@@ -35,7 +35,7 @@ createApp({
                     body: JSON.stringify({
                         smb_name: smbName,
                         smb_size: Number(smbSize),
-                        smb_size_prefix: smbSizePrefix,
+                        size_prefix: smbSizePrefix,
                         smb_permission: smbPermission
                     })
                 });

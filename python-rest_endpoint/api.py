@@ -1,35 +1,25 @@
-from fastapi import FastAPI, status
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-
 from create_share import create_cifs_share
+from flask import Flask, Response, request
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
 
 
-class CifsShare(BaseModel):
-    smb_name: str
-    smb_size: int
-    smb_permission: str
+@app.route("/create_share", methods=["POST"])
+def create_share():
+    share_name = request.json.get("share_name")
+    share_size = request.json.get("share_size")
+    size_unit = request.json.get("size_prefix")
+    permissions = request.json.get("smb_permission")
 
+    size = f"{share_size}{size_unit}"
 
-app = FastAPI(port=4000)
-
-origins = ["*"]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# API endpoint
-@app.post("/cifs_share")
-async def create_share(share: CifsShare):
-    """API Endpoint for creating a share"""
-    # calling share create
-    result = create_cifs_share(share.share_name, share.size, share.permission)
+    result = create_cifs_share(share_name, size, permissions)
     if result:
-        return status.HTTP_200_OK
+        return Response(status=200)
     else:
-        return status.HTTP_400_BAD_REQUEST
+        return Response(status=400)
+
+if __name__ == "__main__":
+    app.run(port=4000)
