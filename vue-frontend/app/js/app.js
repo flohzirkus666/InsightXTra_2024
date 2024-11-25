@@ -40,7 +40,7 @@ createApp({
                     })
                 });
 
-                if (response.ok) {
+                if (response.status === 200) {
                     const data = await response.json();
                     console.log('Success:', data);
                     this.successAlert();
@@ -76,7 +76,7 @@ createApp({
                     })
                 });
 
-                if (response.ok) {
+                if (response.status === 200) {
                     const data = await response.json();
                     console.log('Success:', data);
                     this.successAlert();

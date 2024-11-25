@@ -25,7 +25,7 @@ def create_cifs_share(
         svm={"name": "cifs_svm"},
         size=size,
         nas={"path": f"/{share_name}".lower()},
-        aggregates=[{"name": "cluster1_01_aggr1"}],
+        aggregates=[{"name": "cluster1_01_data"}],
     )
     # second step will be creating a share
     new_share = CifsShare()
@@ -33,7 +33,7 @@ def create_cifs_share(
     new_share.acls = [
         {"permission": "full_control", "user_or_group": permissions, "type": "windows"}
     ]
-    new_share.svm = {"name": "svm1"}
+    new_share.svm = {"name": "cifs_svm"}
     new_share.path = f"/{share_name}".lower()
     new_share.name = share_name
     with connection:
@@ -44,5 +44,6 @@ def create_cifs_share(
             # for showing off
             print(new_vol, new_share)
             # if creating was successul, return true
+            return True
         except NetAppRestError:
             return False

@@ -6,11 +6,11 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route("/create_share", methods=["POST"])
+@app.route("/cifs_share", methods=["POST"])
 def create_share():
-    share_name = request.json.get("share_name")
-    share_size = request.json.get("share_size")
-    size_unit = request.json.get("size_prefix")
+    share_name = request.json.get("smb_name")
+    share_size = request.json.get("smb_size")
+    size_unit = request.json.get("smb_size_prefix")
     permissions = request.json.get("smb_permission")
 
     size = f"{share_size}{size_unit}"

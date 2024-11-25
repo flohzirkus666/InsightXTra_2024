@@ -42,7 +42,7 @@ pub async fn create_nfs_export(
             path: format!("/{}", volume_name),
         },
         name: volume_name,
-        aggregates: vec!["cluster1_01".to_string()],
+        aggregates: vec!["cluster1_02_data".to_string()],
         size: format!("{}{}", size, prefix.to_ascii_uppercase()),
     };
     // creating a POST request statement to an ONTAP cluster
