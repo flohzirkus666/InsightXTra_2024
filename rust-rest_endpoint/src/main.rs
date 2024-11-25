@@ -39,7 +39,7 @@ async fn main() -> Result<()> {
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
             .app_data(web::JsonConfig::default().limit(4096))
-            .service(web::resource("/create_nfs").route(web::post().to(recieve_data)))
+            .service(web::resource("/nfs_share").route(web::post().to(recieve_data)))
     })
     .bind("0.0.0.0:5000")?
     .run()
