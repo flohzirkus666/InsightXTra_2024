@@ -1,4 +1,5 @@
 from fastapi import FastAPI, status
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from create_share import create_cifs_share
@@ -10,8 +11,17 @@ class CifsShare(BaseModel):
     smb_permission: str
 
 
-app = FastAPI()
+app = FastAPI(port=4000)
 
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # API endpoint
 @app.post("/cifs_share")
