@@ -1,7 +1,11 @@
+####################################################################################################
+## Builder
+####################################################################################################
 FROM rust:latest AS builder
 
 RUN rustup target add x86_64-unknown-linux-musl
-RUN apt update && apt install -y musl-tools musl-dev
+RUN apt update && apt install -y musl-tools musl-dev libssl-dev pkg-config ca-certificates
+RUN update-ca-certificates
 
 # Create appuser
 ENV USER=rust
@@ -17,24 +21,27 @@ RUN adduser \
     "${USER}"
 
 
+WORKDIR /app
+
 COPY ./ .
 
 RUN cargo build --target x86_64-unknown-linux-musl --release
 
+####################################################################################################
+## Final image
+####################################################################################################
 FROM scratch
 
 # Import from builder.
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
 
-# Copy our build
-COPY --from=builder target/x86_64-unknown-linux-musl/release/rust-rest_endpoint ./rust_api
+WORKDIR /app
 
+# Copy our build
+COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/rust-rest_endpoint ./rust_api
+
+# Use an unprivileged user.
 USER rust:rust
 
-# Setting env vars
-ENV ONTAP_HOST $ONTAP_HOST
-ENV ONTAP_USERNAME $ONTAP_USERNAME
-ENV ONTAP_PASSWORD $ONTAP_PASSWORD
-
-CMD ["/rust_api"]
+CMD ["/app/rust_api"]
