@@ -13,7 +13,7 @@ yum install -y \
         openssl11-devel \
         tk-devel \
         libffi-devel \
-        git
+        git \
 
 echo "Installing Pyenv"
 curl https://pyenv.run | bash
