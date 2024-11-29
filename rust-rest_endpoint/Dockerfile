@@ -49,4 +49,6 @@ ENV ONTAP_PASSWD=Netapp1!
 # Use an unprivileged user.
 USER rust:rust
 
+EXPOSE 5000
+
 CMD ["/app/rust_api"]
