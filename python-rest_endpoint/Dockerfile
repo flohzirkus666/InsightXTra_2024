@@ -18,7 +18,7 @@ ENV ONTAP_HOST=192.168.0.111
 ENV ONTAP_USER=admin
 ENV ONTAP_PASSWD=Netapp1!
 
-EXPOSE 8000
+EXPOSE 4000
 
 # Specify the entrypoint command to run the application
 ENTRYPOINT ["fastapi", "run", "api.py"]
