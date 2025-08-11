@@ -1,7 +1,7 @@
 use crate::env_vars::read_env_vars;
 use anyhow::{Error, Ok, Result};
-use serde::{Deserialize, Serialize};
 use reqwest::Client;
+use serde::{Deserialize, Serialize};
 
 // Data structure for creating a POST request
 #[derive(Debug, Deserialize, Serialize)]
@@ -46,7 +46,9 @@ pub async fn create_nfs_export(
         size: format!("{}{}", size, prefix.to_ascii_uppercase()),
     };
     // creating a POST request statement to an ONTAP cluster
-    let client = Client::builder().danger_accept_invalid_certs(true).build()?;
+    let client = Client::builder()
+        .danger_accept_invalid_certs(true)
+        .build()?;
 
     let url = format!("https://{}/api/storage/volumes", ontap_host.ontap_host);
     // use it for testing purposes :)

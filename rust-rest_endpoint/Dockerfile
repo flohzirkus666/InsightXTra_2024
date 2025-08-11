@@ -42,7 +42,7 @@ WORKDIR /app
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/rust-rest_endpoint ./rust_api
 
 # Set the environment variables
-ENV ONTAP_HOST=192.168.0.111
+ENV ONTAP_HOST=cluster1.demo.netapp.com
 ENV ONTAP_USER=admin
 ENV ONTAP_PASSWD=Netapp1!
 
