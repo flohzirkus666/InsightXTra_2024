@@ -15,8 +15,8 @@ struct FormData {
     prefix: String,
 }
 
-async fn recieve_data(data: web::Json<FormData>) -> HttpResponse {
-    // recieving request from web-frontend
+async fn receive_data(data: web::Json<FormData>) -> HttpResponse {
+    // receiving request from web-frontend
     create_nfs_export(data.0.volume_name, data.0.size, data.0.prefix)
         .await
         .expect("Failed to create NFS share!");
@@ -39,7 +39,7 @@ async fn main() -> Result<()> {
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
             .app_data(web::JsonConfig::default().limit(4096))
-            .service(web::resource("/nfs_share").route(web::post().to(recieve_data)))
+            .service(web::resource("/nfs_share").route(web::post().to(receive_data)))
     })
     .bind("0.0.0.0:5000")?
     .run()
