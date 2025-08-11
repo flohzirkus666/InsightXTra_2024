@@ -1,0 +1,10 @@
+[project]
+name = "python-rest-endpoint"
+version = "0.1.0"
+description = "Example Python REST endpoint using Flask and NetApp ONTAP SDK"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "flask>=3.1.1",
+    "netapp-ontap>=9.17.1.0",
+]

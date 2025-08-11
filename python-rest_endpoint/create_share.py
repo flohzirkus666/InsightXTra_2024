@@ -14,9 +14,9 @@ connection = HostConnection(
 
 
 def create_cifs_share(
-    share_name: str,
-    size: str,
-    permissions: str,
+        share_name: str,
+        size: str,
+        permissions: str,
 ) -> bool:
     """A simple example for implementing a share creation."""
     # first step: creating a volume
